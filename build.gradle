@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.7.0'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+group = 'com.github.IamAki123'
+version = '1.0.0'
+
+android {
+    namespace 'org.firstinspires.ftc.easyobd'
+    compileSdk 34
+    defaultConfig { minSdk 24 }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'org.firstinspires.ftc:RobotCore:11.1.0'
+    compileOnly 'org.openftc:easyopencv:1.7.3'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = project.group
+                artifactId = 'EasyOBD'
+                version = project.version
+            }
+        }
+    }
+}
