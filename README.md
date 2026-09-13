@@ -2,7 +2,7 @@
 
 FTC EasyOpenCV pipeline that finds yellow game-piece **clusters** and reports each cluster’s camera-relative **X / Y** in inches.
 
-JitPack: `com.github.IamAki123:EasyOBD:1.0.0`
+JitPack: `com.github.IamAki123:EasyOBD:0.1`
 
 ## Install
 
@@ -15,7 +15,7 @@ maven { url = 'https://jitpack.io' }
 In `TeamCode/build.gradle`:
 
 ```gradle
-implementation 'com.github.IamAki123:EasyOBD:1.0.0'
+implementation 'com.github.IamAki123:EasyOBD:0.1'
 implementation 'org.openftc:easyopencv:1.7.3'
 ```
 
