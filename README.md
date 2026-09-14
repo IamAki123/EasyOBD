@@ -157,5 +157,6 @@ Tape the **lens** first. [Tuning](docs/Tuning.md).
 ## Credits
 
 Akash Vijay Aradhya — #23918 Super Sigma Robotics
+Aditi Rao - #23918 Super Sigma Robotics
 
 AI tools (Cursor, ChatGPT, OpenAI Codex in Cursor) were used as development assistants for code generation, debugging, documentation, and refinement. Architecture, requirements, testing, validation, and final implementation decisions were directed and reviewed by the author.
