@@ -16,27 +16,24 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.easyobd.ClusterInfo;
 import org.firstinspires.ftc.easyobd.EasyOBJD;
 import org.firstinspires.ftc.easyobd.EasyOBJDPipeline;
-import org.firstinspires.ftc.easyobd.IntakeHeuristic;
+import org.firstinspires.ftc.easyobd.EasyOBJD.OverlayMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import java.util.List;
+
 /**
- * Copy this file <b>and</b> {@link EasyOBJDUserConfig} into TeamCode.
- * Edit HSV, ball size, camera, and webcam name in {@link EasyOBJDUserConfig}
- * — not in the library.
+ * Copy this file into TeamCode. Preview is the color mask; telemetry is
+ * cluster count, ball count, and each cluster's camera X/Y (inches).
  *
- * <p>For live HSV (wider / tighter), run <b>EasyOBJD Tuner</b>, then paste
- * the telemetry numbers back into {@link EasyOBJDUserConfig}.
- *
- * <p>Gamepad 1 X cycles overlay. Field coords need
- * {@code pipeline.setRobotPose(...)} every loop (see loop()).
+ * <p>Gamepad 1: D-pad up widens HSV, D-pad down tightens.</p>
  */
 @TeleOp(name = "EasyOBJD Sample", group = "EasyOBJD")
 public class EasyOBJDSample extends OpMode {
-    public static final boolean DEBUG_MODE = true;
-    public static final boolean USE_FIELD_FRAME = false;
+    public static final String WEBCAM_NAME = "Webcam 1";
 
     private OpenCvWebcam webcam;
     private EasyOBJDPipeline pipeline;
@@ -48,19 +45,15 @@ public class EasyOBJDSample extends OpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
                 .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(
-                hardwareMap.get(WebcamName.class, EasyOBJDUserConfig.WEBCAM_NAME),
-                cameraMonitorViewId);
-
-        pipeline = EasyOBJD.createPipeline(EasyOBJDUserConfig.create());
+                hardwareMap.get(WebcamName.class, WEBCAM_NAME), cameraMonitorViewId);
+        pipeline = EasyOBJD.createPipeline();
+        pipeline.getConfig().overlayMode = OverlayMode.MASK;
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(
-                        EasyOBJDUserConfig.STREAM_WIDTH,
-                        EasyOBJDUserConfig.STREAM_HEIGHT,
-                        EasyOBJDUserConfig.STREAM_ROTATION,
+                webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT,
                         OpenCvWebcam.StreamFormat.MJPEG);
                 cameraInitialized = true;
             }
@@ -80,36 +73,37 @@ public class EasyOBJDSample extends OpMode {
 
     @Override
     public void loop() {
-        // If you have Pedro / pinpoints / SparkFun OTOS:
-        // pipeline.setRobotPose(localizer.getX(), localizer.getY(), localizer.getHeading());
         tick();
     }
 
     private void tick() {
-        if (gamepad1.xWasPressed()) {
-            pipeline.cycleOverlayMode();
+        if (gamepad1.dpadUpWasPressed()) {
+            pipeline.adjustHsvRange(1);
+        }
+        if (gamepad1.dpadDownWasPressed()) {
+            pipeline.adjustHsvRange(-1);
         }
 
         if (!cameraInitialized) {
             telemetry.addLine("Camera starting...");
         }
-        telemetry.addLine("HSV / ball size: edit EasyOBJDUserConfig");
-        telemetry.addLine("Live HSV: run EasyOBJD Tuner (D-pad up/down)");
-        telemetry.addData("HSV lower", "%.0f, %.0f, %.0f",
+        telemetry.addLine("D-pad UP widen HSV, DOWN tighten");
+        telemetry.addData("HSV lower (H,S,V)", "%.0f, %.0f, %.0f",
                 pipeline.getConfig().hsvLower.val[0],
                 pipeline.getConfig().hsvLower.val[1],
                 pipeline.getConfig().hsvLower.val[2]);
-        telemetry.addData("Ball diameter", "%.2f in", EasyOBJDUserConfig.BALL_DIAMETER_INCHES);
+        telemetry.addData("HSV upper (H,S,V)", "%.0f, %.0f, %.0f",
+                pipeline.getConfig().hsvUpper.val[0],
+                pipeline.getConfig().hsvUpper.val[1],
+                pipeline.getConfig().hsvUpper.val[2]);
+        telemetry.addData("Clusters detected", pipeline.getClusterCount());
+        telemetry.addData("Balls detected", pipeline.getBallCount());
 
-        pipeline.addTelemetry(telemetry, DEBUG_MODE);
-
-        ClusterInfo intake = pipeline.getBestClusterForIntake(IntakeHeuristic.CLOSEST);
-        if (intake != null) {
-            telemetry.addData("Intake target", "#%d  Y=%.1f in", intake.id, intake.y);
-        }
-        if (USE_FIELD_FRAME) {
-            telemetry.addData("Field X", "%.1f", pipeline.FieldX.bestClusterCenterpoint());
-            telemetry.addData("Field Y", "%.1f", pipeline.FieldY.bestClusterCenterpoint());
+        List<ClusterInfo> clusters = pipeline.getClusters();
+        for (ClusterInfo cluster : clusters) {
+            telemetry.addLine("Cluster #" + cluster.id);
+            telemetry.addData("#" + cluster.id + " X", "%.1f in", cluster.x);
+            telemetry.addData("#" + cluster.id + " Y", "%.1f in", cluster.y);
         }
         telemetry.update();
     }

@@ -13,7 +13,7 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.easyobd.Ball;
+import org.firstinspires.ftc.easyobd.ClusterInfo.Ball;
 import org.firstinspires.ftc.easyobd.EasyOBJD;
 import org.firstinspires.ftc.easyobd.EasyOBJDCalibration;
 import org.firstinspires.ftc.easyobd.EasyOBJDPipeline;

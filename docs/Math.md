@@ -2,7 +2,7 @@
 
 [README](../README.md) · [Simple version](MathButDumbed.md) · [API](API.md)
 
-EasyOBJD finds circular game pieces and reports each cluster in **inches**. Defaults assume yellow ~2.8 in balls, a 12×12 grid, and a camera about 19 in high with ~25° downward tilt. Change those in **`EasyOBJDUserConfig`**, not by editing the AAR.
+EasyOBJD finds circular game pieces and reports each cluster in **inches**. Defaults assume yellow ~2.8 in balls, a 12×12 grid, and a camera about 19 in high with ~25° downward tilt. Change those on `pipeline.getConfig()` or optional **`EasyOBJDUserConfig`**, not by editing the AAR.
 
 ## Pipeline
 
@@ -92,4 +92,4 @@ fieldY = poseY + robotForward sin θ − robotRight cos θ
 
 Integral-image 12×12 (clamped on tiny frames). High-circularity contours skip arc-split. Kasa windows vote; weak RMS is dropped. Disk fill rejects the valley between two balls. Fully merged circles can still report as one.
 
-Implemented in `LocalizationMath` (unit-tested) and `EasyOBJDPipeline`.
+Implemented in `LocalizationMath` (unit-tested; grid grouping is in the same file) and `EasyOBJDPipeline`.

@@ -32,8 +32,8 @@ Optional: you push a robot pose (`setRobotPose`) and it also fills field X/Y.
 ## Before you blame the library
 
 1. The webcam preview works in a stock EasyOpenCV OpMode.
-2. `WEBCAM_NAME` in `EasyOBJDUserConfig` matches the RC configuration exactly.
-3. You can see the piece in the **MASK** overlay (run **EasyOBJD Tuner**).
+2. `WEBCAM_NAME` in `EasyOBJDSample` matches the RC configuration exactly.
+3. You can see the piece in the **MASK** overlay (run **EasyOBJD Sample**; D-pad HSV).
 4. Camera height and tilt are taped, not guessed.
 
 If the mask is empty, it is HSV / lighting, not localization math. If the mask is good but X/Y are wrong, it is height, tilt, focal length, or ball diameter.

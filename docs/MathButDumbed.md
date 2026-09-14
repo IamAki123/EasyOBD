@@ -24,7 +24,7 @@ That is `getClusters()`. `getBestClusterForIntake()` picks one (closest by defau
 
 ### 1. Keep only the color you care about
 
-You set HSV in `EasyOBJDUserConfig` (or the Tuner). Everything else becomes black. If this mask is wrong, **nothing later can be right**.
+You set HSV with D-pad on the sample (or optional `EasyOBJDUserConfig`). Everything else becomes black. If this mask is wrong, **nothing later can be right**.
 
 ### 2. Clean the mask a little
 

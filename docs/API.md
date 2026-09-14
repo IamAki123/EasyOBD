@@ -11,7 +11,15 @@ EasyOBJDPipeline createPipeline()
 EasyOBJDPipeline createPipeline(EasyOBJDConfig config)
 ```
 
-Prefer `EasyOBJD.createPipeline(EasyOBJDUserConfig.create())` from TeamCode.
+Nested enums (import as `EasyOBJD.OverlayMode`, etc.):
+
+| Enum | Values |
+| --- | --- |
+| `OverlayMode` | `FULL`, `MASK`, `GRID`, `BALLS`, `DISTANCES` |
+| `LocalizationMethod` | `FLOOR_PLANE`, `SIZE_BASED`, `NONE` |
+| `IntakeHeuristic` | `CLOSEST`, `LEFTMOST`, `HIGHEST_CONFIDENCE` |
+
+Start with `EasyOBJD.createPipeline()` (library defaults). Pass `EasyOBJDUserConfig.create()` only if you copied that TeamCode file.
 
 ## EasyOBJDPipeline
 
@@ -52,9 +60,9 @@ Statics such as `CAMERA_HEIGHT_INCHES` are **defaults only**. After construction
 | `fieldX`, `fieldY` | After `setRobotPose`; else NaN |
 | `centerPx`, `cells` | Image centroid and occupied grid cells |
 
-## Ball
+## ClusterInfo.Ball
 
-`center`, `radiusPx`, `area`, `circularity`, `x/y/z` (size-based camera frame), `confidence`. Always `SIZE_BASED`.
+`center`, `radiusPx`, `area`, `circularity`, `x/y/z` (size-based camera frame), `confidence`. Always `SIZE_BASED`. Import `org.firstinspires.ftc.easyobd.ClusterInfo.Ball`.
 
 ## EasyOBJDConfig (library)
 
@@ -72,6 +80,3 @@ suggestedTiltDegrees(cameraHeightIn, floorDistanceIn, ballDiameterIn)
 horizontalFovDegrees(focalAt640)
 ```
 
-## Deprecated
-
-`EasyOBD`, `EasyOBDPipeline`, `EasyOBDConfig`, `EasyOBDCalibration`, `EasyOBDCreation` still compile.

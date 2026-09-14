@@ -8,6 +8,10 @@
  */
 package org.firstinspires.ftc.easyobd;
 
+import org.firstinspires.ftc.easyobd.ClusterInfo.Ball;
+import org.firstinspires.ftc.easyobd.EasyOBJD.IntakeHeuristic;
+import org.firstinspires.ftc.easyobd.EasyOBJD.LocalizationMethod;
+import org.firstinspires.ftc.easyobd.EasyOBJD.OverlayMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -40,15 +44,15 @@ import java.util.concurrent.atomic.AtomicReference;
  * only update after {@link #setRobotPose}.
  *
  * <h2>Localization</h2>
- * {@link LocalizationMethod#FLOOR_PLANE} is used when the pixel ray hits the
+ * {@link EasyOBJD.LocalizationMethod#FLOOR_PLANE} is used when the pixel ray hits the
  * ball-center plane inside {@link EasyOBJDConfig#maxRangeInches}.
- * {@link LocalizationMethod#SIZE_BASED} is the fallback from apparent radius.
+ * {@link EasyOBJD.LocalizationMethod#SIZE_BASED} is the fallback from apparent radius.
  * See {@link ClusterInfo#localization}.
  *
  * <h2>Thread safety</h2>
  * {@link #processFrame} runs on the EasyOpenCV camera thread. Getters read
  * an immutable snapshot published at the end of each frame (copy-on-write).
- * Do not mutate returned lists or {@link ClusterInfo}/{@link Ball} contents.
+ * Do not mutate returned lists or {@link ClusterInfo}/{@link ClusterInfo.Ball} contents.
  *
  * <h2>Resolution</h2>
  * Stream at 640×480 for preview; set {@link EasyOBJDConfig#processWidth} to

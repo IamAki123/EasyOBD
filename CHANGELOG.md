@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- Tiny public types live on the classes that use them: `EasyOBJD.OverlayMode`, `EasyOBJD.LocalizationMethod`, `EasyOBJD.IntakeHeuristic`, `ClusterInfo.Ball`. Grid grouping moved into `LocalizationMath.java`.
+- Removed `EasyOBD*` compatibility classes. Use `EasyOBJD` / `EasyOBJDPipeline` / `EasyOBJDConfig` / `EasyOBJDCalibration`.
+- Sample workflow matches the first release: `EasyOBJD.createPipeline()`, D-pad HSV, cluster X/Y in one OpMode. UserConfig / Tuner / Calibrate are optional.
+
 ## 1.0.0
 
 First EasyOBJD release. Project renamed from EasyOBD. Java package stays `org.firstinspires.ftc.easyobd`. JitPack: `com.github.IamAki123:EasyOBJD:1.0.0`.

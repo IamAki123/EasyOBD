@@ -4,19 +4,21 @@
 
 Tune in **practice**, not matches. Change **one** thing at a time. Geometry (height, tilt, focal, ball diameter) first if inches are wrong; HSV if the mask is wrong.
 
-> ‼️ **Point every OpMode at `EasyOBJDUserConfig`.** Copying the file does nothing if your TeleOp still builds a raw `EasyOBJDConfig` with library defaults.
-
 ```
-EasyOBJDUserConfig (TeamCode)
-        HSV, ball size, camera, webcam
-                │
-                ▼
-        Tuner (HSV)  →  Calibrate (focal / tilt)  →  Sample / match TeleOp
+EasyOBJD.createPipeline()
+        │
+        ▼
+EasyOBJD Sample  —  D-pad HSV in the same OpMode
+        │
+        ▼
+optional UserConfig / Calibrate  —  saved HSV and camera inches
 ```
 
-## 1. HSV — EasyOBJD Tuner
+## 1. HSV — EasyOBJD Sample (or Tuner)
 
-Driver Station → **EasyOBJD Tuner**. Preview starts on **MASK**.
+Driver Station → **EasyOBJD Sample**. Preview starts on **MASK**. D-pad HSV is on that OpMode, same as the first release.
+
+**EasyOBJD Tuner** is optional if you want MASK plus copy-paste `H_LOW`…`V_HIGH` lines.
 
 | Button | Effect |
 | --- | --- |
@@ -48,9 +50,9 @@ If the ball is **not** vertically centered, use a phone inclinometer on the hous
 ## 3. Suggested order on the field
 
 1. Tape lens height and tilt.
-2. Tuner until MASK looks right.
-3. Calibrate until telemetry Y matches the tape at 2–3 distances.
-4. Sample TeleOp. If X/Y twitch while driving, set `smoothingAlpha` on the library config (optional; 0 = raw).
+2. Sample (D-pad HSV) until MASK looks right.
+3. Optional Calibrate until telemetry Y matches the tape at 2–3 distances.
+4. If X/Y twitch while driving, set `smoothingAlpha` on the library config (optional; 0 = raw).
 
 ## What the library will not fix
 

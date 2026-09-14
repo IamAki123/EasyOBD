@@ -9,7 +9,7 @@ FTC object detection, simplified.
 
 ## About EasyOBJD
 
-EasyOBJD turns an EasyOpenCV webcam frame into filtered, camera-relative game-piece positions (X, Y in inches). You configure HSV, ball size, and the camera **once** in a TeamCode file, tune from the Driver Station, then reuse that setup in TeleOp and auto.
+EasyOBJD turns an EasyOpenCV webcam frame into filtered, camera-relative game-piece positions (X, Y in inches). Copy the sample, D-pad HSV on the Driver Station, read cluster X/Y. Optional UserConfig if you want those numbers saved.
 
 It does **not** replace odometry. Camera X/Y do not need a pose. Field X/Y update only after you call `setRobotPose`.
 
@@ -27,7 +27,7 @@ It does **not** replace a Limelight or a custom ML pipeline if you already trust
 
 **Expected accuracy:** measure *your* robot. With a taped lens height/tilt, a real ball diameter, and a clean mask at 2–4 ft, **a couple of inches** of Y error is a common good result — not a guarantee. Lighting, glare, and wide-angle distortion dominate. Error that *grows toward the image edge* is usually an undistorted lens, not a missing filter. How to score tape vs vision: [Tuning](docs/Tuning.md).
 
-**Current release:** 1.0.0. Copy-in `EasyOBJDUserConfig`, Tuner, Calibrate. JitPack: `com.github.IamAki123:EasyOBJD:1.0.0`. Formerly **EasyOBD** (`EasyOBD*` types still compile).
+**Current release:** 1.0.0. JitPack: `com.github.IamAki123:EasyOBJD:1.0.0`. Copy [`EasyOBJDSample`](samples/EasyOBJDSample.java), run it, D-pad HSV. Optional UserConfig / Calibrate if you want saved inches.
 
 ## First time here?
 
@@ -36,22 +36,22 @@ Do these in order. Each step has a longer page if you get stuck.
 | Step | What you do | Details |
 | --- | --- | --- |
 | 1 | Add the JitPack dependency and EasyOpenCV, sync Gradle | [Install](docs/Install.md) |
-| 2 | Copy [`EasyOBJDUserConfig`](samples/EasyOBJDUserConfig.java) into TeamCode. Set webcam name, HSV, ball size, camera height/tilt | Copying the file does nothing by itself — OpModes must call `EasyOBJDUserConfig.create()` |
-| 3 | Measure the **lens** height and tilt. Set `BALL_DIAMETER_INCHES` to the official piece | Filters cannot fix wrong geometry |
-| 4 | Run **EasyOBJD Tuner** (D-pad up = wider, down = tighter). Copy HSV back into UserConfig | [Tuning](docs/Tuning.md) |
-| 5 | Run **EasyOBJD Calibrate** with one ball at a known tape distance. Copy focal / tilt | [Tuning](docs/Tuning.md#2-inches--easyobjd-calibrate) |
-| 6 | Run **EasyOBJD Sample**. When tape and Y agree, use `getBestClusterForIntake()` in TeleOp | [Sample OpMode](docs/SampleOpMode.md) |
+| 2 | Copy [`EasyOBJDSample`](samples/EasyOBJDSample.java) into TeamCode. Set `WEBCAM_NAME` to match Configure Robot | [Sample OpMode](docs/SampleOpMode.md) |
+| 3 | Run **EasyOBJD Sample**. D-pad **up** widens HSV, **down** tightens. Telemetry is cluster X/Y in inches | Same loop as the first release |
+| 4 | Optional: copy [`EasyOBJDUserConfig`](samples/EasyOBJDUserConfig.java) and pass `EasyOBJDUserConfig.create()` to keep HSV / camera inches | [Tuning](docs/Tuning.md) |
+| 5 | Optional: **EasyOBJD Calibrate** for tape focal length and tilt | [Tuning](docs/Tuning.md#2-inches--easyobjd-calibrate) |
 
 ```
-EasyOBJDUserConfig (TeamCode)
-        HSV, ball size, camera, webcam
-                │
-                ▼
-        Tuner (practice)  →  Calibrate (practice)  →  match TeleOp / auto
-                             getClusters() / getBestClusterForIntake()
+EasyOBJD.createPipeline()
+        │
+        ▼
+EasyOBJD Sample  —  D-pad HSV, getClusters() X/Y
+        │
+        ▼
+optional UserConfig / Calibrate  —  saved HSV and camera inches
 ```
 
-The tuners are **not** in the JitPack AAR.
+Samples are **not** in the JitPack AAR.
 
 ## 1. Install
 
@@ -76,29 +76,18 @@ implementation 'com.github.IamAki123:EasyOBJD:1.0.0'
 
 Sync errors: [Install](docs/Install.md).
 
-## 2. Configure the robot once
+## 2. Copy the sample
 
-> ‼️ **Point TeleOp and auto at `EasyOBJDUserConfig`.** Copying the file does nothing if those OpModes still call `EasyOBJD.createPipeline()` with no config — you keep AAR yellow defaults (`Webcam 1`, 2.8 in, 19 in / 25°).
-
-Copy [`samples/EasyOBJDUserConfig.java`](samples/EasyOBJDUserConfig.java) into TeamCode. Edit **that** file. You do not edit the library.
+Copy [`samples/EasyOBJDSample.java`](samples/EasyOBJDSample.java) into TeamCode. Set `WEBCAM_NAME` to the name in Configure Robot (`Webcam 1` by default).
 
 ```java
-public static String WEBCAM_NAME = "Webcam 1";   // must match Configure Robot
-public static double BALL_DIAMETER_INCHES = 2.8;
-
-public static double H_LOW = 21, S_LOW = 95, V_LOW = 85;
-public static double H_HIGH = 35, S_HIGH = 255, V_HIGH = 255;
-
-public static double CAMERA_HEIGHT_INCHES = 19.0;
-public static double CAMERA_TILT_DEGREES = 25.0;  // positive = pitched down
-```
-
-Then:
-
-```java
-EasyOBJDPipeline pipeline = EasyOBJD.createPipeline(EasyOBJDUserConfig.create());
+EasyOBJDPipeline pipeline = EasyOBJD.createPipeline();
 webcam.setPipeline(pipeline);
 ```
+
+D-pad **up** / **down** widens / tightens HSV in that same OpMode.
+
+To keep HSV and camera inches after you leave the OpMode, copy [`EasyOBJDUserConfig`](samples/EasyOBJDUserConfig.java) and switch to `EasyOBJD.createPipeline(EasyOBJDUserConfig.create())`. You do not edit the library.
 
 ### Coordinates (read once)
 
@@ -113,27 +102,30 @@ webcam.setPipeline(pipeline);
 
 ## 3. Use it in an OpMode
 
-Do not paste HSV or ball size into every OpMode. Call `EasyOBJDUserConfig.create()`.
-
 ```java
-pipeline = EasyOBJD.createPipeline(EasyOBJDUserConfig.create());
+pipeline = EasyOBJD.createPipeline();
+webcam.setPipeline(pipeline);
 
-// every loop, optional:
-// pipeline.setRobotPose(pose.getX(), pose.getY(), pose.getHeading());
+if (gamepad1.dpadUpWasPressed()) {
+    pipeline.adjustHsvRange(1);
+}
+if (gamepad1.dpadDownWasPressed()) {
+    pipeline.adjustHsvRange(-1);
+}
 
-ClusterInfo intake = pipeline.getBestClusterForIntake();
-if (intake != null) {
-    // intake.x / intake.y — inches from the lens
+List<ClusterInfo> clusters = pipeline.getClusters();
+for (ClusterInfo cluster : clusters) {
+    // cluster.x / cluster.y — inches right / forward of the lens
 }
 ```
 
-Drive and telemetry: [Sample OpMode](docs/SampleOpMode.md). Builder details: [API](docs/API.md).
+Optional field frame: `pipeline.setRobotPose(...)`. Full listing: [Sample OpMode](docs/SampleOpMode.md). Builder: [API](docs/API.md).
 
 ## 4. Tune (practice, not matches)
 
-1. Driver Station → **EasyOBJD Tuner**. D-pad **up** = wider HSV, **down** = tighter. Copy the printed `H_LOW`…`V_HIGH` into `EasyOBJDUserConfig`.
-2. **EasyOBJD Calibrate**: one ball, known tape distance, on-axis. Copy focal length and tilt.
-3. Change one value at a time.
+1. Run **EasyOBJD Sample**. D-pad **up** = wider HSV, **down** = tighter.
+2. Optional: paste those HSV numbers into `EasyOBJDUserConfig` and pass `UserConfig.create()` so TeleOp/auto keep them.
+3. Optional: **EasyOBJD Calibrate** for focal length and tilt.
 
 Tape the **lens** first. [Tuning](docs/Tuning.md).
 

@@ -54,7 +54,7 @@ File → Sync Project with Gradle Files.
 
 **You are done when** the project syncs and Android Studio can autocomplete `org.firstinspires.ftc.easyobd.EasyOBJD`.
 
-Next: copy [`EasyOBJDUserConfig`](../samples/EasyOBJDUserConfig.java) and continue in the [README](../README.md) (**2. Configure once**).
+Next: copy [`EasyOBJDSample`](../samples/EasyOBJDSample.java) and continue in the [README](../README.md) (**2. Copy the sample**).
 
 ## Optional: local module
 

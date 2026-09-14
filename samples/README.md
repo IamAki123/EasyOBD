@@ -4,11 +4,9 @@ These files are **not** inside the JitPack AAR. Copy them into TeamCode (`org.fi
 
 | File | When |
 | --- | --- |
-| [EasyOBJDUserConfig.java](EasyOBJDUserConfig.java) | Always. HSV, ball size, camera, webcam name. |
-| [EasyOBJDSample.java](EasyOBJDSample.java) | Match TeleOp. |
-| [EasyOBJDTuner.java](EasyOBJDTuner.java) | Practice: D-pad wider / tighter HSV. |
-| [EasyOBJDCalibrateSample.java](EasyOBJDCalibrateSample.java) | Practice: tape focal length and tilt. |
-
-Do not run Tuner or Calibrate in a match. Point every OpMode at `EasyOBJDUserConfig.create()`.
+| [EasyOBJDSample.java](EasyOBJDSample.java) | Always. `createPipeline()`, D-pad HSV, cluster X/Y. |
+| [EasyOBJDUserConfig.java](EasyOBJDUserConfig.java) | Optional. Saved HSV, ball size, camera, webcam name. |
+| [EasyOBJDTuner.java](EasyOBJDTuner.java) | Optional. MASK overlay while nudging HSV. |
+| [EasyOBJDCalibrateSample.java](EasyOBJDCalibrateSample.java) | Optional. Tape focal length and tilt. |
 
 [Tuning](../docs/Tuning.md) · [Sample OpMode](../docs/SampleOpMode.md)

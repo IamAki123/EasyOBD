@@ -8,6 +8,7 @@
  */
 package org.firstinspires.ftc.easyobd;
 
+import org.firstinspires.ftc.easyobd.EasyOBJD.OverlayMode;
 import org.opencv.core.Scalar;
 
 import java.util.ArrayList;

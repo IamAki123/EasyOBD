@@ -12,16 +12,16 @@ Building this repo (not TeamCode): [Contributing](../CONTRIBUTING.md).
 
 ## Camera does not open / crash on init
 
-**Webcam name.** `EasyOBJDUserConfig.WEBCAM_NAME` must match **Configure Robot** exactly (`Webcam 1`, `Webcam 2`, …). A mismatch throws on `hardwareMap.get`.
+**Webcam name.** `WEBCAM_NAME` in the sample (or `EasyOBJDUserConfig` if you copied it) must match **Configure Robot** exactly (`Webcam 1`, `Webcam 2`, …). A mismatch throws on `hardwareMap.get`.
 
 USB: Control Hub port, cable seated. Only one OpMode should own the camera.
 
 ## Nothing in the mask (all black)
 
-1. Overlay `MASK` or `FULL` (Tuner: **X** cycles).
-2. **EasyOBJD Tuner**: D-pad **up** widens, **down** tightens. Copy HSV into `EasyOBJDUserConfig`.
-3. Defaults are **yellow** (`21, 95, 85` … `35, 255, 255`, H 0–179). Other colors: edit UserConfig, do not edit the AAR.
-4. Red wraps around 0/179: two ranges via `extraColorRange` in `create()`.
+1. Overlay `MASK` or `FULL`.
+2. **EasyOBJD Sample**: D-pad **up** widens, **down** tightens.
+3. Defaults are **yellow** (`21, 95, 85` … `35, 255, 255`, H 0–179). Other colors: `pipeline.getConfig().hsv(...)` or optional `EasyOBJDUserConfig`.
+4. Red wraps around 0/179: two ranges via `extraColorRange`.
 5. `ADAPTIVE_LIGHTING` helps dim arenas. Glare still punches holes — hood the lens.
 
 ## False positives
@@ -60,7 +60,7 @@ pipeline.setRobotPose(pose.getX(), pose.getY(), pose.getHeading());
 
 ## Other season / other color
 
-Edit `EasyOBJDUserConfig` (`H_LOW`…`V_HIGH`, `BALL_DIAMETER_INCHES`). Tune with **EasyOBJD Tuner**.
+Edit HSV on the running pipeline (`adjustHsvRange`) or optional `EasyOBJDUserConfig` (`H_LOW`…`V_HIGH`, `BALL_DIAMETER_INCHES`).
 
 ## Tests vs the robot
 

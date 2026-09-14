@@ -2,47 +2,48 @@
 
 [README](../README.md) · [Tuning](Tuning.md) · [API](API.md)
 
-Copy these **TeamCode** files together (package `org.firstinspires.ftc.teamcode`):
+Copy [`EasyOBJDSample.java`](../samples/EasyOBJDSample.java) into TeamCode (`org.firstinspires.ftc.teamcode`). That is the whole first-run path.
 
 | File | Required? |
 | --- | --- |
-| [`EasyOBJDUserConfig.java`](../samples/EasyOBJDUserConfig.java) | Yes — HSV, ball size, camera, webcam name |
-| [`EasyOBJDSample.java`](../samples/EasyOBJDSample.java) | Yes — match TeleOp |
-| [`EasyOBJDTuner.java`](../samples/EasyOBJDTuner.java) | Practice only |
-| [`EasyOBJDCalibrateSample.java`](../samples/EasyOBJDCalibrateSample.java) | Practice only |
+| [`EasyOBJDSample.java`](../samples/EasyOBJDSample.java) | Yes — create pipeline, D-pad HSV, cluster X/Y |
+| [`EasyOBJDUserConfig.java`](../samples/EasyOBJDUserConfig.java) | Optional — saved HSV, ball size, camera inches |
+| [`EasyOBJDTuner.java`](../samples/EasyOBJDTuner.java) | Optional — MASK preview while nudging HSV |
+| [`EasyOBJDCalibrateSample.java`](../samples/EasyOBJDCalibrateSample.java) | Optional — tape focal / tilt |
 
-The tuners are **not** in the JitPack AAR. Do not select Tuner or Calibrate during a match.
+Samples are **not** in the JitPack AAR.
 
-## `init()` (the only numbers you should edit live in UserConfig)
+## `init()`
 
 ```java
-pipeline = EasyOBJD.createPipeline(EasyOBJDUserConfig.create());
+pipeline = EasyOBJD.createPipeline();
 webcam.setPipeline(pipeline);
-webcam.openCameraDeviceAsync(...); // startStreaming from UserConfig width/height
+webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT, OpenCvWebcam.StreamFormat.MJPEG);
 ```
 
-Do **not** paste HSV or ball diameter into every OpMode. Point TeleOp and auto at `EasyOBJDUserConfig.create()`.
+Set `WEBCAM_NAME` in the sample to match Configure Robot.
 
 ## `loop()`
 
 ```java
-// Optional field frame (Pedro / pinpoints / OTOS), inches + heading rad:
-// pipeline.setRobotPose(pose.getX(), pose.getY(), pose.getHeading());
+if (gamepad1.dpadUpWasPressed()) {
+    pipeline.adjustHsvRange(1);
+}
+if (gamepad1.dpadDownWasPressed()) {
+    pipeline.adjustHsvRange(-1);
+}
 
-ClusterInfo intake = pipeline.getBestClusterForIntake();
-if (intake != null) {
-    // intake.x = inches right of the lens
-    // intake.y = inches forward of the lens
+List<ClusterInfo> clusters = pipeline.getClusters();
+for (ClusterInfo cluster : clusters) {
+    // cluster.x = inches right of the lens
+    // cluster.y = inches forward of the lens
 }
 ```
-
-Leave field conversion off until camera X/Y match tape. `USE_FIELD_FRAME` in the sample only **displays** field numbers.
 
 ## First-run checklist
 
 1. `WEBCAM_NAME` matches Configure Robot.
-2. Run **EasyOBJD Tuner**. D-pad up = wider HSV, down = tighter. Copy telemetry into `EasyOBJDUserConfig`.
-3. Run **EasyOBJD Calibrate** with one ball at a known distance. Copy focal / tilt into `EasyOBJDUserConfig`.
-4. Run **EasyOBJD Sample** and compare `Y` to a tape measure.
+2. Run **EasyOBJD Sample**. D-pad up = wider HSV, down = tighter.
+3. Compare telemetry `Y` to a tape measure. Optional Calibrate if inches are off.
 
 Full listings: [`samples/`](../samples/).
