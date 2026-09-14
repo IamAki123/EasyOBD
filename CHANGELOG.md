@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0
+
+First EasyOBJD release. Project renamed from EasyOBD. Java package stays `org.firstinspires.ftc.easyobd`. JitPack: `com.github.IamAki123:EasyOBJD:1.0.0`.
+
+### Added
+- TeamCode copy-in [`EasyOBJDUserConfig`](samples/EasyOBJDUserConfig.java), [`EasyOBJDTuner`](samples/EasyOBJDTuner.java) (D-pad HSV), and Calibrate sample.
+- Explicit library config for HSV (`.hsv(...)`) and ball size (`.ballSize(...)`).
+- Color-agnostic HSV nudge.
+- EasyATL-style docs (Install, Tuning, API, math, contributing, security), MIT file headers, issue templates, and CI.
+- `KnownGeometries` / `SampleValuesTest` for the published sample defaults.
+
+### Changed
+- Primary types: `EasyOBJD`, `EasyOBJDPipeline`, `EasyOBJDConfig`, `EasyOBJDCalibration`.
+- `EasyOBD*` names remain as deprecated aliases.
+- Sample documents `WEBCAM_NAME` vs the Robot Controller configuration.
+
 ## 0.2
 
 Config, API, and robustness pass. Detection math is the same idea (HSV → grid → arc split → floor or size) with clearer contracts and fewer shared statics.

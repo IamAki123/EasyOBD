@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2026 Akash Vijay Aradhya
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * EasyOBJD - FTC EasyOpenCV object detection
+ * https://github.com/IamAki123/EasyOBJD
+ */
 package org.firstinspires.ftc.easyobd;
 
 import org.opencv.core.Point;
@@ -29,9 +37,9 @@ public final class ClusterInfo {
      * 0 if the cluster has fewer than two associated balls.
      */
     public final double tightness;
-    /** Field X after {@link EasyOBDPipeline#setRobotPose}; otherwise NaN. */
+    /** Field X after {@link EasyOBJDPipeline#setRobotPose}; otherwise NaN. */
     public final double fieldX;
-    /** Field Y after {@link EasyOBDPipeline#setRobotPose}; otherwise NaN. */
+    /** Field Y after {@link EasyOBJDPipeline#setRobotPose}; otherwise NaN. */
     public final double fieldY;
 
     public ClusterInfo(int id, double x, double y, Point centerPx, List<Integer> cells) {

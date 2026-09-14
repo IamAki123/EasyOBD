@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2026 Akash Vijay Aradhya
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * EasyOBJD - FTC EasyOpenCV object detection
+ * https://github.com/IamAki123/EasyOBJD
+ */
 package org.firstinspires.ftc.easyobd;
 
 /**
@@ -5,7 +13,7 @@ package org.firstinspires.ftc.easyobd;
  *
  * <p>{@link #FLOOR_PLANE} is preferred whenever the pixel ray intersects the
  * ball-center plane (camera height + downward tilt) inside
- * {@link EasyOBDConfig#maxRangeInches}. {@link #SIZE_BASED} is the fallback
+ * {@link EasyOBJDConfig#maxRangeInches}. {@link #SIZE_BASED} is the fallback
  * when the ray misses that plane (level camera, ball above the horizon, or
  * extreme tilt) and an apparent radius is available.
  */

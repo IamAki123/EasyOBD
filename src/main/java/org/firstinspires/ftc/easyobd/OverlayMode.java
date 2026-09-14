@@ -1,6 +1,14 @@
+/*
+ * Copyright (c) 2026 Akash Vijay Aradhya
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * EasyOBJD - FTC EasyOpenCV object detection
+ * https://github.com/IamAki123/EasyOBJD
+ */
 package org.firstinspires.ftc.easyobd;
 
-/** What {@link EasyOBDPipeline} draws on the preview Mat. */
+/** What {@link EasyOBJDPipeline} draws on the preview Mat. */
 public enum OverlayMode {
     /** Yellow mask, grid, balls, cluster markers, and range labels. */
     FULL,

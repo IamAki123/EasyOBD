@@ -1,161 +1,161 @@
-# EasyOBD
+# EasyOBJD
 
-FTC EasyOpenCV pipeline that finds yellow game-piece **clusters**, splits merged blobs into circular balls, and reports each cluster’s camera-relative **X / Y** in inches (optional field frame after you push a robot pose).
+FTC object detection, simplified.
 
-JitPack: `com.github.IamAki123:EasyOBD:0.2`
+[![Release](https://img.shields.io/github/v/tag/IamAki123/EasyOBJD?label=release)](https://github.com/IamAki123/EasyOBJD/tags)
+[![JitPack](https://jitpack.io/v/IamAki123/EasyOBJD.svg)](https://jitpack.io/#IamAki123/EasyOBJD)
+[![Tests](https://github.com/IamAki123/EasyOBJD/actions/workflows/tests.yml/badge.svg)](https://github.com/IamAki123/EasyOBJD/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Install
+## About EasyOBJD
 
-In `build.dependencies.gradle` (or your root repositories):
+EasyOBJD turns an EasyOpenCV webcam frame into filtered, camera-relative game-piece positions (X, Y in inches). You configure HSV, ball size, and the camera **once** in a TeamCode file, tune from the Driver Station, then reuse that setup in TeleOp and auto.
 
-```gradle
-maven { url = 'https://jitpack.io' }
+It does **not** replace odometry. Camera X/Y do not need a pose. Field X/Y update only after you call `setRobotPose`.
+
+### Why EasyOBJD instead of a raw HSV OpMode?
+
+EasyOpenCV already gives you a `Mat`. EasyOBJD adds the pieces teams usually rewrite:
+
+- HSV mask with live widen/tighten (not hardcoded to one season)
+- 12×12 grid clustering so touching pieces are one group
+- Circularity + arc-split so peanut blobs become individual balls
+- Floor-plane inches from camera height + tilt, with size-based fallback
+- Immutable snapshots, intake pick, debug overlay
+
+It does **not** replace a Limelight or a custom ML pipeline if you already trust those. Use EasyOBJD when you want “where is that yellow (or other-color) circle?” in inches on a Control Hub webcam.
+
+**Expected accuracy:** measure *your* robot. With a taped lens height/tilt, a real ball diameter, and a clean mask at 2–4 ft, **a couple of inches** of Y error is a common good result — not a guarantee. Lighting, glare, and wide-angle distortion dominate. Error that *grows toward the image edge* is usually an undistorted lens, not a missing filter. How to score tape vs vision: [Tuning](docs/Tuning.md).
+
+**Current release:** 1.0.0. Copy-in `EasyOBJDUserConfig`, Tuner, Calibrate. JitPack: `com.github.IamAki123:EasyOBJD:1.0.0`. Formerly **EasyOBD** (`EasyOBD*` types still compile).
+
+## First time here?
+
+Do these in order. Each step has a longer page if you get stuck.
+
+| Step | What you do | Details |
+| --- | --- | --- |
+| 1 | Add the JitPack dependency and EasyOpenCV, sync Gradle | [Install](docs/Install.md) |
+| 2 | Copy [`EasyOBJDUserConfig`](samples/EasyOBJDUserConfig.java) into TeamCode. Set webcam name, HSV, ball size, camera height/tilt | Copying the file does nothing by itself — OpModes must call `EasyOBJDUserConfig.create()` |
+| 3 | Measure the **lens** height and tilt. Set `BALL_DIAMETER_INCHES` to the official piece | Filters cannot fix wrong geometry |
+| 4 | Run **EasyOBJD Tuner** (D-pad up = wider, down = tighter). Copy HSV back into UserConfig | [Tuning](docs/Tuning.md) |
+| 5 | Run **EasyOBJD Calibrate** with one ball at a known tape distance. Copy focal / tilt | [Tuning](docs/Tuning.md#2-inches--easyobjd-calibrate) |
+| 6 | Run **EasyOBJD Sample**. When tape and Y agree, use `getBestClusterForIntake()` in TeleOp | [Sample OpMode](docs/SampleOpMode.md) |
+
+```
+EasyOBJDUserConfig (TeamCode)
+        HSV, ball size, camera, webcam
+                │
+                ▼
+        Tuner (practice)  →  Calibrate (practice)  →  match TeleOp / auto
+                             getClusters() / getBestClusterForIntake()
 ```
 
-In `TeamCode/build.gradle`:
+The tuners are **not** in the JitPack AAR.
+
+## 1. Install
+
+In a stock FTC SDK project, add JitPack next to `mavenCentral()` and `google()` in the **root** `build.dependencies.gradle`:
 
 ```gradle
-implementation 'com.github.IamAki123:EasyOBD:0.2'
-implementation 'org.openftc:easyopencv:1.7.3'
-```
-
-Or, while developing next to this repo:
-
-```gradle
-implementation project(':EasyOBD')
-```
-
-**Compatibility:** EasyOpenCV **1.7.x**, FTC RobotCore / SDK **10.x or 11.x** (built against RobotCore 11.1.0). Java 8. The library is `compileOnly` on those artifacts so your TeamCode SDK version wins at runtime.
-
-## Use
-
-Copy [`samples/EasyOBDSample.java`](samples/EasyOBDSample.java) into TeamCode, or:
-
-```java
-EasyOBDConfig config = EasyOBDConfig.builder()
-        .camera(19.0, 25.0, 70.4)   // height in, downward tilt deg, horizontal FOV deg
-        .processWidth(320)          // process at 320-wide; preview can stay 640×480
-        .build();
-
-EasyOBDPipeline pipeline = EasyOBD.createPipeline(config);
-webcam.setPipeline(pipeline);
-
-// Camera frame (no odometry):
-for (ClusterInfo cluster : pipeline.getClusters()) {
-    // cluster.id is 1..n, left to right
-    // cluster.x = inches right of the lens
-    // cluster.y = inches forward of the lens
-    // cluster.localization = FLOOR_PLANE or SIZE_BASED
-    // cluster.balls = circular pieces associated with this group
+repositories {
+    mavenCentral()
+    google()
+    maven { url = 'https://jitpack.io' }
 }
-
-// Optional field frame (Pedro / pinpoints / OTOS):
-pipeline.setRobotPose(localizer.getX(), localizer.getY(), localizer.getHeading());
-double fieldX = pipeline.FieldX.bestClusterCenterpoint();
-double fieldY = pipeline.FieldY.bestClusterCenterpoint();
-
-ClusterInfo intake = pipeline.getBestClusterForIntake(); // closest by default
 ```
 
-Live HSV: **D-pad up** widens yellow, **D-pad down** tightens (`pipeline.adjustHsvRange`). **X** cycles the debug overlay. Tuned starting range:
+Then in `TeamCode/build.gradle`, inside `dependencies`:
 
-- Lower: `21, 95, 85`
-- Upper: `35, 255, 255`
-
-`getClusters()` / `getBalls()` return immutable snapshots from the last frame. Do not mutate them.
-
-## Coordinate frames
-
-```
-Camera (no pose required)
-          +Y forward of lens
-              ^
-              |
-              |
-    −X <------+------> +X right of lens
-            lens
-
-Robot (offsets + yaw from EasyOBDConfig)
-          +Y forward of robot center
-              ^
-              |
-    −X <------+------> +X right of center
-
-Field (after setRobotPose, Pedro-style)
-    +X forward on the field when heading = 0
-    +Y left-handed partner axis used by cameraToField
+```gradle
+implementation 'org.openftc:easyopencv:1.7.3'
+implementation 'com.github.IamAki123:EasyOBJD:1.0.0'
 ```
 
-1. **Camera X / Y** — pinhole + tilt. X is right of the lens, Y is forward along the floor. This is what `ClusterInfo.x` / `.y` and `getClusterX()` / `getClusterY()` report.
-2. **Robot X / Y** — camera point rotated by `cameraYawDegrees` and shifted by `cameraForwardOfCenter` / `cameraRightOfCenter`. See `getClusterRobotX()` / `getClusterRobotY()`.
-3. **Field X / Y** — robot point rotated by the heading you pass to `setRobotPose`. `ClusterInfo.fieldX` / `.fieldY` are `NaN` until a pose is set.
+**Sync:** File → Sync Project with Gradle Files. Use Android Studio’s Embedded JDK for the Gradle JVM.
 
-**Localization method:** floor-plane (camera height + downward tilt) is used when the pixel ray hits the ball-center plane inside `maxRangeInches`. Size-based ranging (known 2.8 in diameter vs apparent radius) is the fallback. Read `cluster.localization` or `pipeline.usedFloorPlane()`.
+Sync errors: [Install](docs/Install.md).
 
-## Calibration
+## 2. Configure the robot once
 
-Copy [`samples/EasyOBDCalibrateSample.java`](samples/EasyOBDCalibrateSample.java) or use `EasyOBDCalibration` directly.
+> ‼️ **Point TeleOp and auto at `EasyOBJDUserConfig`.** Copying the file does nothing if those OpModes still call `EasyOBJD.createPipeline()` with no config — you keep AAR yellow defaults (`Webcam 1`, 2.8 in, 19 in / 25°).
 
-1. Measure **camera height** from the tiles to the lens (tape).
-2. Place **one official ball** on the floor, centered in the image, at a known tape distance *D* (31 in is a good start).
-3. Read the apparent radius *r* (px) from the calibrate sample / debug overlay.
-4. Set:
+Copy [`samples/EasyOBJDUserConfig.java`](samples/EasyOBJDUserConfig.java) into TeamCode. Edit **that** file. You do not edit the library.
 
 ```java
-config.focalLengthPixelsAt640 = EasyOBDCalibration.focalLengthAt640(r, D, processWidth);
-config.cameraTiltDegrees = EasyOBDCalibration.suggestedTiltDegrees(heightIn, D);
+public static String WEBCAM_NAME = "Webcam 1";   // must match Configure Robot
+public static double BALL_DIAMETER_INCHES = 2.8;
+
+public static double H_LOW = 21, S_LOW = 95, V_LOW = 85;
+public static double H_HIGH = 35, S_HIGH = 255, V_HIGH = 255;
+
+public static double CAMERA_HEIGHT_INCHES = 19.0;
+public static double CAMERA_TILT_DEGREES = 25.0;  // positive = pitched down
 ```
 
-`suggestedTiltDegrees` assumes the ball sits on the optical axis (image center). If it does not, put a phone inclinometer on the camera housing and use that pitch instead.
+Then:
 
-Leave `focalLengthPixelsAt640 = 0` to derive focal length from `horizontalFovDegrees` (default 70.4° → ~454 px at 640-wide).
+```java
+EasyOBJDPipeline pipeline = EasyOBJD.createPipeline(EasyOBJDUserConfig.create());
+webcam.setPipeline(pipeline);
+```
 
-Checkerboard / AprilTag extrinsics can replace these tape numbers later; the math hook is `setRobotPose` plus `EasyOBDConfig` camera offsets.
+### Coordinates (read once)
 
-## HSV, tilt, and lighting
-
-- **Widen / tighten** with D-pad, or set `config.yellowLower` / `yellowUpper`.
-- Enable `config.adaptiveLighting` if arena lights punch holes in the mask (relaxes S/V when the frame is dark).
-- Additional colors: `config.extraColorRanges.add(new EasyOBDConfig.ColorRange(lower, upper))`.
-- Morphology kernel size scales with process width (override with `openKernelSize` / `closeKernelSize`).
-
-## Resolution and performance
-
-| Stream (preview) | `processWidth` | Typical Control Hub cost | When to use |
-| --- | --- | --- | --- |
-| 640×480 | 640 (or scale 1.0) | ~20–40 ms / frame | Distant balls, first bring-up |
-| 640×480 | **320** | ~8–20 ms / frame | Driving / intake (recommended) |
-
-Preview stays at stream resolution. Processing is independent when `processWidth` is set. Times vary with lighting and blob count; read `pipeline.getLastProcessTimeMs()` or enable the sample `DEBUG_MODE`.
-
-## What it does
-
-1. HSV yellow mask (optional extra ranges, adaptive lighting)
-2. Morphological open/close (size scales with resolution) + fill external holes
-3. 12×12 integral-image grid; touching occupied cells become a cluster (grid shrinks on tiny frames)
-4. Circular / arc ball detection (Kasa fit + voting). High-circularity contours skip the expensive split. Weak arcs are dropped before merge.
-5. Floor-plane X/Y from camera height + pitch, or size-based fallback
-6. Optional exponential smoothing (`smoothingAlpha`) for driving; leave `0` for raw high-speed data
-
-## Known limitations
-
-- Harsh arena lighting, glare, and reflective tiles still create holes or false yellow.
-- Partial occlusion and very distant balls (> `maxRangeInches`, default 60 in) are rejected.
-- Wide-angle / fisheye lenses are not undistorted; detections near the image edge will bias range.
-- Two balls that completely merge into one circle may still report as one.
-- Floor-plane needs a downward tilt. A level camera at 19 in cannot see a floor ball at 31 in on the optical axis.
-
-## API notes
-
-- **Config is per pipeline.** Statics such as `EasyOBDPipeline.CAMERA_HEIGHT_INCHES` are defaults copied by the no-arg constructor. After construction, change `pipeline.getConfig()` (or pass an `EasyOBDConfig`).
-- **`EasyOBDCreation`** is a deprecated subclass of `EasyOBDPipeline` for 0.1 source compatibility.
-- **`getBestClusterForIntake(CLOSEST | LEFTMOST | HIGHEST_CONFIDENCE)`** applies a simple team heuristic.
-- **Overlay:** `OverlayMode.FULL`, `MASK`, `GRID`, `BALLS`, `DISTANCES`.
-- Offline: you can pass a pre-built `Mat` into `processFrame`. The JUnit tests in `src/test/java` cover pinhole + tilt math and grid clustering without loading OpenCV.
-
-## Samples
-
-| File | Purpose |
+| Quantity | Units / convention |
 | --- | --- |
-| [`samples/EasyOBDSample.java`](samples/EasyOBDSample.java) | TeleOp: camera + field usage, debug overlay, intake pick |
-| [`samples/EasyOBDCalibrateSample.java`](samples/EasyOBDCalibrateSample.java) | Tape calibration for focal length and tilt |
+| Cluster X / Y | Inches right / forward of the **lens** |
+| Robot X / Y | Inches right / forward of robot center (offsets + yaw) |
+| Field X / Y | After `setRobotPose` (inches, heading radians) |
+| HSV hue | OpenCV 8-bit **0–179** |
+| Camera tilt | Degrees, **positive = down** |
+| Ball diameter | Inches |
+
+## 3. Use it in an OpMode
+
+Do not paste HSV or ball size into every OpMode. Call `EasyOBJDUserConfig.create()`.
+
+```java
+pipeline = EasyOBJD.createPipeline(EasyOBJDUserConfig.create());
+
+// every loop, optional:
+// pipeline.setRobotPose(pose.getX(), pose.getY(), pose.getHeading());
+
+ClusterInfo intake = pipeline.getBestClusterForIntake();
+if (intake != null) {
+    // intake.x / intake.y — inches from the lens
+}
+```
+
+Drive and telemetry: [Sample OpMode](docs/SampleOpMode.md). Builder details: [API](docs/API.md).
+
+## 4. Tune (practice, not matches)
+
+1. Driver Station → **EasyOBJD Tuner**. D-pad **up** = wider HSV, **down** = tighter. Copy the printed `H_LOW`…`V_HIGH` into `EasyOBJDUserConfig`.
+2. **EasyOBJD Calibrate**: one ball, known tape distance, on-axis. Copy focal length and tilt.
+3. Change one value at a time.
+
+Tape the **lens** first. [Tuning](docs/Tuning.md).
+
+## Docs
+
+| Page | When to open it |
+| --- | --- |
+| [Docs index](docs/DocsInfo.md) | List of all guide pages |
+| [Prerequisites](docs/Prerequisites.md) | Webcam, what EasyOBJD does not do |
+| [Install](docs/Install.md) | Gradle, JitPack, local module, JDK |
+| [Sample OpMode](docs/SampleOpMode.md) | Files to copy |
+| [Tuning](docs/Tuning.md) | Tuner vs Calibrate, field procedure |
+| [Math (simple)](docs/MathButDumbed.md) | How it works, no formulas |
+| [Math](docs/Math.md) | Pinhole, tilt, floor-plane |
+| [What each file does](docs/LibraryFiles.md) | Pipeline, config, math, samples |
+| [API](docs/API.md) | Method-by-method reference |
+| [Troubleshooting](docs/Troubleshooting.md) | Blank mask, wrong inches, NaN field |
+| [Changelog](CHANGELOG.md) | What changed between releases |
+| [Contributing](CONTRIBUTING.md) | Building this repo from source |
+
+## Credits
+
+Akash Vijay Aradhya — #23918 Super Sigma Robotics
+
+AI tools (Cursor, ChatGPT, OpenAI Codex in Cursor) were used as development assistants for code generation, debugging, documentation, and refinement. Architecture, requirements, testing, validation, and final implementation decisions were directed and reviewed by the author.

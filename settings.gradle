@@ -13,8 +13,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = 'https://maven.brott.dev/' }
         maven { url = 'https://jitpack.io' }
     }
 }
 
-rootProject.name = 'EasyOBD'
+rootProject.name = 'EasyOBJD'

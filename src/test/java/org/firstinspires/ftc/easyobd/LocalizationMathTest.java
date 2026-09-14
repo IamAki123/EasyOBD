@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2026 Akash Vijay Aradhya
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * EasyOBJD - FTC EasyOpenCV object detection
+ * https://github.com/IamAki123/EasyOBJD
+ */
 package org.firstinspires.ftc.easyobd;
 
 import org.junit.Test;
@@ -37,7 +45,7 @@ public class LocalizationMathTest {
         double height = 19.0;
         double distance = 31.0;
         double diameter = 2.8;
-        double tilt = EasyOBDCalibration.suggestedTiltDegrees(height, distance, diameter);
+        double tilt = EasyOBJDCalibration.suggestedTiltDegrees(height, distance, diameter);
         double[] hit = LocalizationMath.pixelToFloor(
                 320, 240, 640, 480,
                 height, diameter, 0, 70.4, tilt);

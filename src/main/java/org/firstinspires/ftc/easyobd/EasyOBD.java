@@ -1,25 +1,25 @@
+/*
+ * Copyright (c) 2026 Akash Vijay Aradhya
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * EasyOBJD - FTC EasyOpenCV object detection
+ * https://github.com/IamAki123/EasyOBJD
+ */
 package org.firstinspires.ftc.easyobd;
 
 /**
- * Factory for the EasyOBD yellow-cluster pipeline.
- *
- * <pre>
- * EasyOBDConfig config = EasyOBDConfig.builder()
- *         .camera(19, 25, 70.4)
- *         .processWidth(320)
- *         .build();
- * EasyOBDPipeline pipeline = EasyOBD.createPipeline(config);
- * webcam.setPipeline(pipeline);
- * </pre>
+ * @deprecated Use {@link EasyOBJD}.
  */
+@Deprecated
 public final class EasyOBD {
     private EasyOBD() {}
 
-    public static EasyOBDPipeline createPipeline() {
-        return new EasyOBDPipeline();
+    public static EasyOBJDPipeline createPipeline() {
+        return EasyOBJD.createPipeline();
     }
 
-    public static EasyOBDPipeline createPipeline(EasyOBDConfig config) {
-        return new EasyOBDPipeline(config);
+    public static EasyOBJDPipeline createPipeline(EasyOBJDConfig config) {
+        return EasyOBJD.createPipeline(config);
     }
 }
