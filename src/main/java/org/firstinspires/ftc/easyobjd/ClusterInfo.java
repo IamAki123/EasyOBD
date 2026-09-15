@@ -6,9 +6,9 @@
  * EasyOBJD - FTC EasyOpenCV object detection
  * https://github.com/IamAki123/EasyOBJD
  */
-package org.firstinspires.ftc.easyobd;
+package org.firstinspires.ftc.easyobjd;
 
-import org.firstinspires.ftc.easyobd.EasyOBJD.LocalizationMethod;
+import org.firstinspires.ftc.easyobjd.EasyOBJD.LocalizationMethod;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;

@@ -6,12 +6,12 @@
  * EasyOBJD - FTC EasyOpenCV object detection
  * https://github.com/IamAki123/EasyOBJD
  */
-package org.firstinspires.ftc.easyobd;
+package org.firstinspires.ftc.easyobjd;
 
-import org.firstinspires.ftc.easyobd.ClusterInfo.Ball;
-import org.firstinspires.ftc.easyobd.EasyOBJD.IntakeHeuristic;
-import org.firstinspires.ftc.easyobd.EasyOBJD.LocalizationMethod;
-import org.firstinspires.ftc.easyobd.EasyOBJD.OverlayMode;
+import org.firstinspires.ftc.easyobjd.ClusterInfo.Ball;
+import org.firstinspires.ftc.easyobjd.EasyOBJD.IntakeHeuristic;
+import org.firstinspires.ftc.easyobjd.EasyOBJD.LocalizationMethod;
+import org.firstinspires.ftc.easyobjd.OverlayMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

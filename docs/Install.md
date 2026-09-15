@@ -52,7 +52,7 @@ If `build.dependencies.gradle` already holds Pedro or other libraries, you can p
 
 File → Sync Project with Gradle Files.
 
-**You are done when** the project syncs and Android Studio can autocomplete `org.firstinspires.ftc.easyobd.EasyOBJD`.
+**You are done when** the project syncs and Android Studio can autocomplete `org.firstinspires.ftc.easyobjd.EasyOBJD`.
 
 Next: copy [`EasyOBJDSample`](../samples/EasyOBJDSample.java) and continue in the [README](../README.md) (**2. Copy the sample**).
 

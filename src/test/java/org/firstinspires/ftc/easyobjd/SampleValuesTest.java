@@ -6,31 +6,31 @@
  * EasyOBJD - FTC EasyOpenCV object detection
  * https://github.com/IamAki123/EasyOBJD
  */
-package org.firstinspires.ftc.easyobd;
+package org.firstinspires.ftc.easyobjd;
 
 import org.junit.Test;
 
-import static org.firstinspires.ftc.easyobd.KnownGeometries.BALL_DIAMETER_IN;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.CALIBRATE_DISTANCE_IN;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.CAMERA_HEIGHT_IN;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.CAMERA_TILT_DEG;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.DEFAULT_FORWARD_OFFSET_IN;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.DEFAULT_RIGHT_OFFSET_IN;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.DEFAULT_YAW_DEG;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.H_HIGH;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.H_LOW;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.HORIZONTAL_FOV_DEG;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.IMAGE_CX;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.IMAGE_CY;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.MAX_RANGE_IN;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.MIN_BALL_DIAMETER_IN;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.PROCESS_WIDTH;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.S_HIGH;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.S_LOW;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.STREAM_HEIGHT;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.STREAM_WIDTH;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.V_HIGH;
-import static org.firstinspires.ftc.easyobd.KnownGeometries.V_LOW;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.BALL_DIAMETER_IN;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.CALIBRATE_DISTANCE_IN;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.CAMERA_HEIGHT_IN;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.CAMERA_TILT_DEG;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.DEFAULT_FORWARD_OFFSET_IN;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.DEFAULT_RIGHT_OFFSET_IN;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.DEFAULT_YAW_DEG;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.H_HIGH;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.H_LOW;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.HORIZONTAL_FOV_DEG;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.IMAGE_CX;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.IMAGE_CY;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.MAX_RANGE_IN;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.MIN_BALL_DIAMETER_IN;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.PROCESS_WIDTH;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.S_HIGH;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.S_LOW;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.STREAM_HEIGHT;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.STREAM_WIDTH;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.V_HIGH;
+import static org.firstinspires.ftc.easyobjd.KnownGeometries.V_LOW;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

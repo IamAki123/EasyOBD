@@ -3,8 +3,9 @@
 ## Unreleased
 
 ### Changed
-- Tiny public types live on the classes that use them: `EasyOBJD.OverlayMode`, `EasyOBJD.LocalizationMethod`, `EasyOBJD.IntakeHeuristic`, `ClusterInfo.Ball`. Grid grouping moved into `LocalizationMath.java`.
+- Tiny public types: `OverlayMode` (top-level, same as JitPack 1.0.0), `EasyOBJD.LocalizationMethod`, `EasyOBJD.IntakeHeuristic`, `ClusterInfo.Ball`. Grid grouping moved into `LocalizationMath.java`.
 - Removed `EasyOBD*` compatibility classes. Use `EasyOBJD` / `EasyOBJDPipeline` / `EasyOBJDConfig` / `EasyOBJDCalibration`.
+- Java package renamed from `org.firstinspires.ftc.easyobd` to `org.firstinspires.ftc.easyobjd`. Update TeamCode imports.
 - Sample workflow matches the first release: `EasyOBJD.createPipeline()`, D-pad HSV, cluster X/Y in one OpMode. UserConfig / Tuner / Calibrate are optional.
 
 ## 1.0.0

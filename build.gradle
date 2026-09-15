@@ -15,7 +15,7 @@ group = 'com.github.IamAki123'
 version = '1.0.0'
 
 android {
-    namespace 'org.firstinspires.ftc.easyobd'
+    namespace 'org.firstinspires.ftc.easyobjd'
     compileSdk 34
     defaultConfig { minSdk 24 }
 
@@ -32,6 +32,13 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+    }
+
+    // Index samples/ in Android Studio without putting them in the release AAR / JitPack.
+    sourceSets {
+        debug {
+            java.srcDirs += ['samples']
+        }
     }
 }
 

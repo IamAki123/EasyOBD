@@ -13,10 +13,10 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.easyobd.ClusterInfo;
-import org.firstinspires.ftc.easyobd.EasyOBJD;
-import org.firstinspires.ftc.easyobd.EasyOBJDPipeline;
-import org.firstinspires.ftc.easyobd.EasyOBJD.OverlayMode;
+import org.firstinspires.ftc.easyobjd.ClusterInfo;
+import org.firstinspires.ftc.easyobjd.EasyOBJD;
+import org.firstinspires.ftc.easyobjd.EasyOBJDPipeline;
+import org.firstinspires.ftc.easyobjd.OverlayMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -30,7 +30,18 @@ import java.util.List;
  * cluster count, ball count, and each cluster's camera X/Y (inches).
  *
  * <p>Gamepad 1: D-pad up widens HSV, D-pad down tightens.</p>
+ *
+ * <p>TeamCode will not resolve {@code org.firstinspires.ftc.easyobjd} until
+ * JitPack is a repository and TeamCode depends on the library:</p>
+ * <pre>
+ * maven { url = 'https://jitpack.io' }
+ * implementation 'org.openftc:easyopencv:1.7.3'
+ * implementation 'com.github.IamAki123:EasyOBJD:1.0.0'
+ * </pre>
+ * Then File → Sync Project with Gradle Files.
  */
+//noinspection SpellCheckingInspection
+@SuppressWarnings("unused")
 @TeleOp(name = "EasyOBJD Sample", group = "EasyOBJD")
 public class EasyOBJDSample extends OpMode {
     public static final String WEBCAM_NAME = "Webcam 1";

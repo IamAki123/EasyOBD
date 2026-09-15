@@ -2,7 +2,7 @@
 
 [README](../README.md) · [Library files](LibraryFiles.md) · [Sample OpMode](SampleOpMode.md)
 
-Package: `org.firstinspires.ftc.easyobd`. Current JitPack: **1.0.0**.
+Package: `org.firstinspires.ftc.easyobjd`. Current JitPack: **1.0.0**.
 
 ## EasyOBJD
 
@@ -11,13 +11,9 @@ EasyOBJDPipeline createPipeline()
 EasyOBJDPipeline createPipeline(EasyOBJDConfig config)
 ```
 
-Nested enums (import as `EasyOBJD.OverlayMode`, etc.):
-
-| Enum | Values |
-| --- | --- |
-| `OverlayMode` | `FULL`, `MASK`, `GRID`, `BALLS`, `DISTANCES` |
-| `LocalizationMethod` | `FLOOR_PLANE`, `SIZE_BASED`, `NONE` |
-| `IntakeHeuristic` | `CLOSEST`, `LEFTMOST`, `HIGHEST_CONFIDENCE` |
+| `OverlayMode` | `FULL`, `MASK`, `GRID`, `BALLS`, `DISTANCES` — `import org.firstinspires.ftc.easyobjd.OverlayMode` |
+| `EasyOBJD.LocalizationMethod` | `FLOOR_PLANE`, `SIZE_BASED`, `NONE` |
+| `EasyOBJD.IntakeHeuristic` | `CLOSEST`, `LEFTMOST`, `HIGHEST_CONFIDENCE` |
 
 Start with `EasyOBJD.createPipeline()` (library defaults). Pass `EasyOBJDUserConfig.create()` only if you copied that TeamCode file.
 
@@ -62,7 +58,7 @@ Statics such as `CAMERA_HEIGHT_INCHES` are **defaults only**. After construction
 
 ## ClusterInfo.Ball
 
-`center`, `radiusPx`, `area`, `circularity`, `x/y/z` (size-based camera frame), `confidence`. Always `SIZE_BASED`. Import `org.firstinspires.ftc.easyobd.ClusterInfo.Ball`.
+`center`, `radiusPx`, `area`, `circularity`, `x/y/z` (size-based camera frame), `confidence`. Always `SIZE_BASED`. Import `org.firstinspires.ftc.easyobjd.ClusterInfo.Ball`.
 
 ## EasyOBJDConfig (library)
 

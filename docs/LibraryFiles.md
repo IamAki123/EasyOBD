@@ -2,13 +2,14 @@
 
 [README](../README.md) · [API](API.md) · [Docs index](DocsInfo.md)
 
-Java package is `org.firstinspires.ftc.easyobd`.
+Java package is `org.firstinspires.ftc.easyobjd`.
 
 ## You call these
 
 | File | Role |
 | --- | --- |
-| `EasyOBJD.java` | Factory plus nested `OverlayMode`, `LocalizationMethod`, `IntakeHeuristic`. |
+| `EasyOBJD.java` | Factory plus nested `LocalizationMethod` and `IntakeHeuristic`. |
+| `OverlayMode.java` | Preview: `FULL`, `MASK`, `GRID`, `BALLS`, `DISTANCES`. |
 | `EasyOBJDPipeline.java` | EasyOpenCV pipeline: mask, grid, balls, localize, overlay, snapshots. |
 | `EasyOBJDConfig.java` | Library tunables. Optional TeamCode `EasyOBJDUserConfig` fills these; you can also use `createPipeline()` defaults. |
 | `EasyOBJDCalibration.java` | Tape helpers: focal length and suggested tilt. |

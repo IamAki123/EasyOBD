@@ -4,8 +4,17 @@
 
 ## Gradle / sync
 
-- Add JitPack to the **same** `repositories` block TeamCode actually uses (`build.dependencies.gradle` or `settings.gradle` if `FAIL_ON_PROJECT_REPOS`).
-- Autocomplete missing: confirm `implementation 'com.github.IamAki123:EasyOBJD:1.0.0'` synced. First JitPack build of a new tag can take a minute.
+**Cannot resolve symbol `easyobjd` / `EasyOBJD` / `EasyOBJDPipeline`.** The sample is TeamCode, not part of the JitPack AAR. In the **FTC robot project** (not this GitHub repo):
+
+1. JitPack in the same `repositories` block TeamCode actually uses (`build.dependencies.gradle`, or `settings.gradle` if `FAIL_ON_PROJECT_REPOS`):
+   `maven { url = 'https://jitpack.io' }`
+2. In `TeamCode/build.gradle` `dependencies`:
+   `implementation 'org.openftc:easyopencv:1.7.3'`
+   `implementation 'com.github.IamAki123:EasyOBJD:1.0.0'`
+3. File → Sync Project with Gradle Files.
+
+Opening `samples/EasyOBJDSample.java` **inside this library repo** is only for editing. Copy it into TeamCode to run on a robot. First JitPack build of a tag can take a minute.
+
 - `JAVA_HOME` on Java 8: Android Gradle Plugin 8.7 needs JDK 11+. Use Android Studio’s Embedded JDK.
 
 Building this repo (not TeamCode): [Contributing](../CONTRIBUTING.md).
@@ -64,4 +73,4 @@ Edit HSV on the running pipeline (`adjustHsvRange`) or optional `EasyOBJDUserCon
 
 ## Tests vs the robot
 
-JUnit covers pinhole/tilt math, grid grouping, and [sample default inches](../src/test/java/org/firstinspires/ftc/easyobd/SampleValuesTest.java). A green CI run does not prove arena lighting.
+JUnit covers pinhole/tilt math, grid grouping, and [sample default inches](../src/test/java/org/firstinspires/ftc/easyobjd/SampleValuesTest.java). A green CI run does not prove arena lighting.

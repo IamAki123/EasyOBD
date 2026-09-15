@@ -6,7 +6,7 @@
  * EasyOBJD - FTC EasyOpenCV object detection
  * https://github.com/IamAki123/EasyOBJD
  */
-package org.firstinspires.ftc.easyobd;
+package org.firstinspires.ftc.easyobjd;
 
 /**
  * Tape-measure helpers for {@link EasyOBJDConfig#focalLengthPixelsAt640} and

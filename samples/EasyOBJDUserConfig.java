@@ -8,7 +8,7 @@
  */
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.easyobd.EasyOBJDConfig;
+import org.firstinspires.ftc.easyobjd.EasyOBJDConfig;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 /**
