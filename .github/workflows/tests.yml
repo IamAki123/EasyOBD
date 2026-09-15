@@ -13,7 +13,10 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
+        with:
+          # Default still requests the obsolete `tools` package, which sdkmanager no longer ships.
+          packages: 'platform-tools'
       - name: Run unit tests and assemble the library
         run: |
           chmod +x gradlew
